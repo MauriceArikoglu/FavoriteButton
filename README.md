@@ -24,17 +24,9 @@ For manual instalation, drag Source folder into your project.
 os use [CocoaPod](https://cocoapods.org) adding this line to you `Podfile`:
 
 ```ruby
-pod 'FaveButton', '~> 1.2.1' swift 2.2
+pod 'FavoriteButton', '~> 3.0.0' Swift 4
 
-pod 'FaveButton', '~> 2.0.3' swift 3
 ```
-
-for [Carthage](https://github.com/Carthage/Carthage) users, add this line to you `Cartfile`
-
-```ruby
-github "xhamr/fave-button"
-```
-
 
 ## Usage
 
@@ -89,7 +81,7 @@ func faveButtonDotColors(_ faveButton: FaveButton) -> [DotColors]?{
 }
 ```
 
-in [FaveButtonDemo](https://github.com/xhamr/fave-button/tree/master/FaveButtonDemo) you will find a set of color to cause dots appear like this:
+in FaveButtonDemo you will find a set of color to cause dots appear like this:
 
 ![preview](https://github.com/xhamr/fave-button/blob/master/fave-button2.gif)
 
@@ -97,12 +89,11 @@ in [FaveButtonDemo](https://github.com/xhamr/fave-button/tree/master/FaveButtonD
 
 ## Credits
 
-FaveButton was inspired by Twitter’s Like Heart Animation within their [App](https://itunes.apple.com/us/app/twitter/id333903271)
-
+Forked from [xhamr](https://github.com/xhamr/fave-button)
 
 ## Licence
 
-FaveButton is released under the MIT license.
+FaveButton is still under the MIT license.
 
 
 
