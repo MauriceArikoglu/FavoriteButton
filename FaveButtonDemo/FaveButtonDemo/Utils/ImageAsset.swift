@@ -11,7 +11,7 @@ extension UIImage {
 
 // MARK: - ImageAsset
 enum ImageAsset: String {
-    case star = "star"
+    case star
 
     var image: UIImage {
         return UIImage(named: self.rawValue)!

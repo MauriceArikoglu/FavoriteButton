@@ -19,17 +19,17 @@ extension NSUserDefaults {
 // MARK: NSFileManager
 extension NSFileManager {
     func imagesets(inAssetsPath path: String) -> [String]? {
-        
+
         // let remove white spaces and dash from asset name. e.g My Image.imagesets, My-Image.imagesets into My_Image
         let normalize = { (asset: String) -> String in
-            if let regex = try? NSRegularExpression(pattern: "\\s|-", options: .CaseInsensitive){
-                let range = NSRange(location: 0,length: asset.characters.count)
-                
+            if let regex = try? NSRegularExpression(pattern: "\\s|-", options: .CaseInsensitive) {
+                let range = NSRange(location: 0, length: asset.characters.count)
+
                 return regex.stringByReplacingMatchesInString(asset, options: .WithTransparentBounds, range: range, withTemplate: "_")
             }
             return asset
         }
-        
+
         do {
             let subpaths = try subpathsOfDirectoryAtPath(path)
             return subpaths
@@ -39,8 +39,7 @@ extension NSFileManager {
                 .map {
                     normalize(($0 as NSString).lastPathComponent.componentsSeparatedByString(".")[0])
                 }
-        }
-        catch {
+        } catch {
             print("\n[Error] An error occurred in \(#function).\n\t error: \(error)\n")
         }
         return nil
@@ -56,7 +55,7 @@ func build(assets: [String], _ exportPath: String, _ enumName: String) -> Bool {
     file += "\n"
     file += "import UIKit" + "\n"
     file += "\n"
-    
+
     /// UIImage extension
     file += "// MARK: - UIImage extension" + "\n"
     file += "extension UIImage {" + "\n"
@@ -66,9 +65,9 @@ func build(assets: [String], _ exportPath: String, _ enumName: String) -> Bool {
     file += indent + "}" + "\n"
     ///end of UIImage extension
     file += "}" + "\n"
-    
+
     file += "\n"
-    
+
     /// enum
     file += "// MARK: - " + enumName + "\n"
     file += "enum \(enumName): String {" + "\n"
@@ -81,19 +80,19 @@ func build(assets: [String], _ exportPath: String, _ enumName: String) -> Bool {
     file += indent + "}" + "\n"
     /// end of enum
     file += "}" + "\n"
-    
+
     let data = file.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
     return NSFileManager.defaultManager().createFileAtPath(exportPath, contents: data, attributes: nil)
 }
 
 // MARK: - Main
 let (path, exportPath, enumName) = NSUserDefaults.standardUserDefaults().arguments
-let fm = NSFileManager.defaultManager()
+let fileManager = NSFileManager.defaultManager()
 
-guard let imagesets = fm.imagesets(inAssetsPath: path) where !imagesets.isEmpty else {
+guard let imagesets = fileManager.imagesets(inAssetsPath: path), !imagesets.isEmpty else {
     fatalError("\n[Error] No imageset is found and failed to export a file...\n")
 }
-//let result = fm.build(imagesets, exportPath, enumName)
+//let result = fileManager.build(imagesets, exportPath, enumName)
 let result = build(imagesets, exportPath, enumName)
 let resultStr = result ? "Succeeded" : "Failed"
 print("\n\(resultStr) to generate enum and UIImage extension file at \(exportPath).\n")
