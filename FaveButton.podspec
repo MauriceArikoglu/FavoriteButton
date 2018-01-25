@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
 
-  s.name         = "FaveButton"
-  s.version      = "2.0.3"
-  s.summary      = "Twitter's heart like animated button written in Swift"
+  s.name         = "FavoriteButton"
+  s.version      = "3.0.0"
+  s.summary      = "Twitter's heart like animated button updated to Swift 4"
   s.license      = 'MIT'
-  s.homepage     = 'https://github.com/xhamr/fave-button'
-  s.author       = { 'Jansel Valentin' => 'jvra16@gmail.com' }
+  s.homepage     = 'https://github.com/MauriceArikoglu/FavoriteButton'
+  s.author       = { 'Maurice Arikoglu' => 'development@mauricearikoglu.de' }
   s.ios.deployment_target = '8.0'
-  s.source       = { :git => 'https://github.com/xhamr/fave-button.git', :tag => s.version.to_s }
+  s.source       = { :git => 'https://github.com/MauriceArikoglu/FavoriteButton', :tag => s.version.to_s }
   s.source_files  = 'Source/**/*.swift'
   s.requires_arc = true
   end
