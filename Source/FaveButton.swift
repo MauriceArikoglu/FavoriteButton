@@ -24,38 +24,57 @@
 
 import UIKit
 
-
-
 public typealias DotColors = (first: UIColor, second: UIColor)
 
 public protocol FaveButtonDelegate{
-    func faveButton(_ faveButton: FaveButton, didSelected selected: Bool)
     
+    func faveButton(_ faveButton: FaveButton, didSelected selected: Bool)
     func faveButtonDotColors(_ faveButton: FaveButton) -> [DotColors]?
+    
 }
 
-
 // MARK: Default implementation
-public extension FaveButtonDelegate{
+public extension FaveButtonDelegate {
+    
     func faveButtonDotColors(_ faveButton: FaveButton) -> [DotColors]?{ return nil }
+
 }
 
 open class FaveButton: UIButton {
     
-    fileprivate struct Const{
+    fileprivate struct Constants {
+        
         static let duration             = 1.0
         static let expandDuration       = 0.1298 
         static let collapseDuration     = 0.1089
-        static let faveIconShowDelay    = Const.expandDuration + Const.collapseDuration/2.0
+        static let faveIconShowDelay    = Constants.expandDuration + Constants.collapseDuration/2.0
         static let dotRadiusFactors     = (first: 0.0633, second: 0.04)
+        
     }
     
-    @IBInspectable open var normalColor: UIColor     = UIColor(colorLiteralRed: 137/255, green: 156/255, blue: 167/255, alpha: 1)
-    @IBInspectable open var selectedColor: UIColor   = UIColor(colorLiteralRed: 226/255, green: 38/255,  blue: 77/255,  alpha: 1)
-    @IBInspectable open var dotFirstColor: UIColor   = UIColor(colorLiteralRed: 152/255, green: 219/255, blue: 236/255, alpha: 1)
-    @IBInspectable open var dotSecondColor: UIColor  = UIColor(colorLiteralRed: 247/255, green: 188/255, blue: 48/255,  alpha: 1)
-    @IBInspectable open var circleFromColor: UIColor = UIColor(colorLiteralRed: 221/255, green: 70/255,  blue: 136/255, alpha: 1)
-    @IBInspectable open var circleToColor: UIColor   = UIColor(colorLiteralRed: 205/255, green: 143/255, blue: 246/255, alpha: 1)
+    @IBInspectable open var normalColor: UIColor = UIColor(red:   137.0.fromRGB,
+                                                           green: 156.0.fromRGB,
+                                                           blue:  167.0.fromRGB, alpha: 1.0)
+    
+    @IBInspectable open var selectedColor: UIColor = UIColor(red:   226.0.fromRGB,
+                                                             green: 38.0.fromRGB,
+                                                             blue:  77.0.fromRGB,  alpha: 1.0)
+    
+    @IBInspectable open var dotFirstColor: UIColor = UIColor(red:   152.0.fromRGB,
+                                                             green: 219.0.fromRGB,
+                                                             blue:  236.0.fromRGB, alpha: 1.0)
+    
+    @IBInspectable open var dotSecondColor: UIColor = UIColor(red:   247.0.fromRGB,
+                                                              green: 188.0.fromRGB,
+                                                              blue:  48.0.fromRGB,  alpha: 1.0)
+    
+    @IBInspectable open var circleFromColor: UIColor = UIColor(red:   221.0.fromRGB,
+                                                               green: 70.0.fromRGB,
+                                                               blue:  136.0.fromRGB, alpha: 1.0)
+    
+    @IBInspectable open var circleToColor: UIColor = UIColor(red:   205.0.fromRGB,
+                                                             green: 143.0.fromRGB,
+                                                             blue:  246.0.fromRGB, alpha: 1.0)
     
     @IBOutlet open weak var delegate: AnyObject?
     
@@ -64,10 +83,9 @@ open class FaveButton: UIButton {
     fileprivate var faveIconImage:UIImage?
     fileprivate var faveIcon: FaveIcon!
     
-    
-    override open var isSelected: Bool{
-        didSet{
-            animateSelect(self.isSelected, duration: Const.duration)
+    override open var isSelected: Bool {
+        didSet {
+            animateSelect(self.isSelected, duration: Constants.duration)
         }
     }
     
@@ -77,6 +95,7 @@ open class FaveButton: UIButton {
         guard let icon = faveIconNormal else{
             fatalError("missing image for normal state")
         }
+        
         faveIconImage = icon
         
         applyInit()
@@ -90,18 +109,19 @@ open class FaveButton: UIButton {
         super.init(coder: aDecoder)
         applyInit()
     }
+    
 }
-
 
 // MARK: create
 extension FaveButton{
-    fileprivate func applyInit(){
+    
+    fileprivate func applyInit() {
         
-        if nil == faveIconImage{
+        if nil == faveIconImage {
             faveIconImage = image(for: UIControlState())
         }
         
-        guard let faveIconImage = faveIconImage else{
+        guard let faveIconImage = faveIconImage else {
             fatalError("please provide an image for normal state.")
         }
         
@@ -115,36 +135,33 @@ extension FaveButton{
         addActions()
     }
     
-    
-    fileprivate func createFaveIcon(_ faveIconImage: UIImage) -> FaveIcon{
+    fileprivate func createFaveIcon(_ faveIconImage: UIImage) -> FaveIcon {
         return FaveIcon.createFaveIcon(self, icon: faveIconImage,color: normalColor)
     }
-    
     
     fileprivate func createSparks(_ radius: CGFloat) -> [Spark] {
         var sparks    = [Spark]()
         let step      = 360.0/Double(sparkGroupCount)
         let base      = Double(bounds.size.width)
-        let dotRadius = (base * Const.dotRadiusFactors.first, base * Const.dotRadiusFactors.second)
+        let dotRadius = (base * Constants.dotRadiusFactors.first, base * Constants.dotRadiusFactors.second)
         let offset    = 10.0
         
-        for index in 0..<sparkGroupCount{
+        for index in 0..<sparkGroupCount {
             let theta  = step * Double(index) + offset
             let colors = dotColors(atIndex: index)
             
-            let spark  = Spark.createSpark(self, radius: radius, firstColor: colors.first,secondColor: colors.second, angle: theta,
-                                           dotRadius: dotRadius)
+            let spark = Spark.createSpark(self, radius: radius, firstColor: colors.first,secondColor: colors.second, angle: theta, dotRadius: dotRadius)
+            
             sparks.append(spark)
         }
         return sparks
     }
 }
 
-
-// MARK: utils
-
-extension FaveButton{
-    fileprivate func dotColors(atIndex index: Int) -> DotColors{
+// MARK: Utility
+extension FaveButton {
+    
+    fileprivate func dotColors(atIndex index: Int) -> DotColors {
         if case let delegate as FaveButtonDelegate = delegate , nil != delegate.faveButtonDotColors(self){
             let colors     = delegate.faveButtonDotColors(self)!
             let colorIndex = 0..<colors.count ~= index ? index : index % colors.count
@@ -153,71 +170,64 @@ extension FaveButton{
         }
         return DotColors(self.dotFirstColor, self.dotSecondColor)
     }
+    
 }
 
-
-// MARK: actions
-extension FaveButton{
-    func addActions(){
+// MARK: Actions
+extension FaveButton {
+    
+    func addActions() {
         self.addTarget(self, action: #selector(toggle(_:)), for: .touchUpInside)
     }
     
-    func toggle(_ sender: FaveButton){
+    @objc func toggle(_ sender: FaveButton) {
         sender.isSelected = !sender.isSelected
         
-        guard case let delegate as FaveButtonDelegate = self.delegate else{
+        guard case let delegate as FaveButtonDelegate = self.delegate else {
             return
         }
         
-        let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Const.duration)) / Double(NSEC_PER_SEC)
-        DispatchQueue.main.asyncAfter(deadline: delay){
+        let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Constants.duration)) / Double(NSEC_PER_SEC)
+        
+        DispatchQueue.main.asyncAfter(deadline: delay) {
             delegate.faveButton(sender, didSelected: sender.isSelected)
         }
     }
+    
 }
 
-
-// MARK: animation
-extension FaveButton{
-    fileprivate func animateSelect(_ isSelected: Bool, duration: Double){
+// MARK: Animation
+extension FaveButton {
+    
+    fileprivate func animateSelect(_ isSelected: Bool, duration: Double) {
         let color  = isSelected ? selectedColor : normalColor
         
-        faveIcon.animateSelect(isSelected, fillColor: color, duration: duration, delay: Const.faveIconShowDelay)
+        faveIcon.animateSelect(isSelected, fillColor: color, duration: duration, delay: Constants.faveIconShowDelay)
         
-        if isSelected{
-            let radius           = bounds.size.scaleBy(1.3).width/2 // ring radius
-            let igniteFromRadius = radius*0.8
-            let igniteToRadius   = radius*1.1
+        if isSelected {
+            let radius = bounds.size.scaleBy(1.3).width / 2 // ring radius
+            let igniteFromRadius = radius * 0.8
+            let igniteToRadius = radius * 1.1
             
-            let ring   = Ring.createRing(self, radius: 0.01, lineWidth: 3, fillColor: self.circleFromColor)
+            let ring = Ring.createRing(self, radius: 0.01, lineWidth: 3, fillColor: self.circleFromColor)
             let sparks = createSparks(igniteFromRadius)
             
-            ring.animateToRadius(radius, toColor: circleToColor, duration: Const.expandDuration, delay: 0)
-            ring.animateColapse(radius, duration: Const.collapseDuration, delay: Const.expandDuration)
+            ring.animateToRadius(radius, toColor: circleToColor, duration: Constants.expandDuration, delay: 0)
+            ring.animateColapse(radius, duration: Constants.collapseDuration, delay: Constants.expandDuration)
 
-            sparks.forEach{
-                $0.animateIgniteShow(igniteToRadius, duration:0.4, delay: Const.collapseDuration/3.0)
+            sparks.forEach {
+                $0.animateIgniteShow(igniteToRadius, duration:0.4, delay: Constants.collapseDuration/3.0)
                 $0.animateIgniteHide(0.7, delay: 0.2)
             }
         }
     }
+    
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+private extension Double {
+    
+    var fromRGB: CGFloat {
+        return CGFloat(self / 255.0)
+    }
+    
+}
