@@ -120,10 +120,6 @@ open class FavoriteButton: UIButton {
         applyInit()
     }
 
-    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        selectionFeedback.prepare()
-    }
-
 }
 
 // MARK: create
@@ -199,6 +195,9 @@ extension FavoriteButton {
     }
 
     @objc func toggle(_ sender: FavoriteButton) {
+        
+        selectionFeedback.prepare()
+
         sender.isSelected = !sender.isSelected
 
         if providesHapticFeedback {
