@@ -24,7 +24,9 @@ For manual instalation, drag Source folder into your project.
 os use [CocoaPod](https://cocoapods.org) adding this line to you `Podfile`:
 
 ```ruby
-pod 'FavoriteButton', '~> 3.0.0' Swift 4
+pod 'FavoriteButton', '~> 3.0.1' Swift 4 (iOS 8.0+, discontinued)
+
+pod 'FavoriteButton', '~> 3.1.0' Swift 4 (iOS 10.0+, in development)
 
 ```
 
