@@ -18,10 +18,11 @@ func color(_ rgbColor: Int) -> UIColor {
     )
 }
 
-class ViewController: UIViewController, FaveButtonDelegate {
+@available(iOS 10.0, *)
+class ViewController: UIViewController, FavoriteButtonDelegate {
 
-    @IBOutlet var heartButton: FaveButton?
-    @IBOutlet var loveButton: FaveButton?
+    @IBOutlet var heartButton: FavoriteButton?
+    @IBOutlet var loveButton: FavoriteButton?
 
     let colors = [
         DotColors(first: color(0x7DC2F4), second: color(0xE2264D)),
@@ -31,10 +32,10 @@ class ViewController: UIViewController, FaveButtonDelegate {
         DotColors(first: color(0xF68FA7), second: color(0xF6A2B8))
     ]
 
-    func faveButton(_ faveButton: FaveButton, didSelect selected: Bool) {
+    func favoriteButton(_ faveButton: FavoriteButton, didSelect selected: Bool) {
     }
 
-    func faveButtonDotColors(_ faveButton: FaveButton) -> [DotColors]? {
+    func favoriteButtonDotColors(_ faveButton: FavoriteButton) -> [DotColors]? {
         if faveButton === heartButton || faveButton === loveButton {
             return colors
         }

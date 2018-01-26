@@ -1,8 +1,8 @@
 //
-//  FaveButton.swift
-//  FaveButton
+//  FavoriteButton.swift
+//  FavoriteButton
 //
-// Copyright © 2016 Jansel Valentin.
+// Copyright © 2016 Jansel Valentin, Copyright © 2018 Maurice Arikoglu
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,21 +26,24 @@ import UIKit
 
 public typealias DotColors = (first: UIColor, second: UIColor)
 
-public protocol FaveButtonDelegate {
+@available(iOS 10.0, *)
+public protocol FavoriteButtonDelegate {
 
-    func faveButton(_ faveButton: FaveButton, didSelect selected: Bool)
-    func faveButtonDotColors(_ faveButton: FaveButton) -> [DotColors]?
+    func favoriteButton(_ faveButton: FavoriteButton, didSelect selected: Bool)
+    func favoriteButtonDotColors(_ faveButton: FavoriteButton) -> [DotColors]?
 
 }
 
 // MARK: Default implementation
-public extension FaveButtonDelegate {
+@available(iOS 10.0, *)
+public extension FavoriteButtonDelegate {
 
-    func faveButtonDotColors(_ faveButton: FaveButton) -> [DotColors]? { return nil }
+    func favoriteButtonDotColors(_ faveButton: FavoriteButton) -> [DotColors]? { return nil }
 
 }
 
-open class FaveButton: UIButton {
+@available(iOS 10.0, *)
+open class FavoriteButton: UIButton {
 
     fileprivate struct Constants {
 
@@ -83,6 +86,13 @@ open class FaveButton: UIButton {
     fileprivate var faveIconImage: UIImage?
     fileprivate var faveIcon: FaveIcon!
 
+    var providesHapticFeedback: Bool = true
+    var selectionFeedback: UISelectionFeedbackGenerator = {
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        return generator
+    }()
+
     override open var isSelected: Bool {
         didSet {
             animateSelect(self.isSelected, duration: Constants.duration)
@@ -110,10 +120,15 @@ open class FaveButton: UIButton {
         applyInit()
     }
 
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        selectionFeedback.prepare()
+    }
+
 }
 
 // MARK: create
-extension FaveButton {
+@available(iOS 10.0, *)
+extension FavoriteButton {
 
     fileprivate func applyInit() {
 
@@ -160,11 +175,12 @@ extension FaveButton {
 }
 
 // MARK: Utility
-extension FaveButton {
+@available(iOS 10.0, *)
+extension FavoriteButton {
 
     fileprivate func dotColors(atIndex index: Int) -> DotColors {
-        if case let delegate as FaveButtonDelegate = delegate, nil != delegate.faveButtonDotColors(self) {
-            let colors     = delegate.faveButtonDotColors(self)!
+        if case let delegate as FavoriteButtonDelegate = delegate, nil != delegate.favoriteButtonDotColors(self) {
+            let colors     = delegate.favoriteButtonDotColors(self)!
             let colorIndex = 0..<colors.count ~= index ? index : index % colors.count
 
             return colors[colorIndex]
@@ -175,30 +191,36 @@ extension FaveButton {
 }
 
 // MARK: Actions
-extension FaveButton {
-
+@available(iOS 10.0, *)
+extension FavoriteButton {
+    
     func addActions() {
         self.addTarget(self, action: #selector(toggle(_:)), for: .touchUpInside)
     }
 
-    @objc func toggle(_ sender: FaveButton) {
+    @objc func toggle(_ sender: FavoriteButton) {
         sender.isSelected = !sender.isSelected
 
-        guard case let delegate as FaveButtonDelegate = self.delegate else {
+        if providesHapticFeedback {
+            selectionFeedback.selectionChanged()
+        }
+        
+        guard case let delegate as FavoriteButtonDelegate = self.delegate else {
             return
         }
 
         let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Constants.duration)) / Double(NSEC_PER_SEC)
 
         DispatchQueue.main.asyncAfter(deadline: delay) {
-            delegate.faveButton(sender, didSelect: sender.isSelected)
+            delegate.favoriteButton(sender, didSelect: sender.isSelected)
         }
     }
 
 }
 
 // MARK: Animation
-extension FaveButton {
+@available(iOS 10.0, *)
+extension FavoriteButton {
 
     fileprivate func animateSelect(_ isSelected: Bool, duration: Double) {
         let color  = isSelected ? selectedColor : normalColor

@@ -1,6 +1,6 @@
 //
 //  Init.swift
-//  FaveButton
+//  FavoriteButton
 //
 // Copyright © 2016 Jansel Valentin.
 //

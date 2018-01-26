@@ -1,8 +1,8 @@
 //
 //  Ring.swift
-//  FaveButton
+//  FavoriteButton
 //
-// Copyright © 2016 Jansel Valentin.
+// Copyright © 2016 Jansel Valentin, Copyright © 2018 Maurice Arikoglu
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 
 import UIKit
 
+@available(iOS 10.0, *)
 class Ring: UIView {
 
     fileprivate struct Constants {
@@ -54,9 +55,10 @@ class Ring: UIView {
 }
 
 // MARK: Create
+@available(iOS 10.0, *)
 extension Ring {
 
-    class func createRing(_ faveButton: FaveButton, radius: CGFloat, lineWidth: CGFloat, fillColor: UIColor) -> Ring {
+    class func createRing(_ faveButton: FavoriteButton, radius: CGFloat, lineWidth: CGFloat, fillColor: UIColor) -> Ring {
 
         let ring = Init(Ring(radius: radius, lineWidth:lineWidth, fillColor: fillColor)) {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -112,6 +114,7 @@ extension Ring {
 }
 
 // MARK: Animation
+@available(iOS 10.0, *)
 extension Ring {
 
     func animateToRadius(_ radius: CGFloat, toColor: UIColor, duration: Double, delay: Double = 0.0) {
@@ -209,6 +212,7 @@ extension Ring {
 }
 
 // MARK: CAAnimationDelegate
+@available(iOS 10.0, *)
 extension Ring: CAAnimationDelegate {
 
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {

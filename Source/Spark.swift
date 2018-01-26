@@ -1,8 +1,8 @@
 //
 //  Spark.swift
-//  FaveButton
+//  FavoriteButton
 //
-// Copyright © 2016 Jansel Valentin.
+// Copyright © 2016 Jansel Valentin, Copyright © 2018 Maurice Arikoglu
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ import UIKit
 
 internal typealias DotRadius = (first: Double, second: Double)
 
+@available(iOS 10.0, *)
 class Spark: UIView {
 
     fileprivate struct Constants {
@@ -66,9 +67,10 @@ class Spark: UIView {
 }
 
 // MARK: Create
+@available(iOS 10.0, *)
 extension Spark {
 
-    class func createSpark(_ faveButton: FaveButton, radius: CGFloat, firstColor: UIColor, secondColor: UIColor, angle: Double, dotRadius: DotRadius) -> Spark {
+    class func createSpark(_ faveButton: FavoriteButton, radius: CGFloat, firstColor: UIColor, secondColor: UIColor, angle: Double, dotRadius: DotRadius) -> Spark {
 
         let spark = Init(Spark(radius: radius, firstColor: firstColor, secondColor: secondColor, angle: angle, dotRadius: dotRadius)) {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -149,6 +151,7 @@ extension Spark {
 }
 
 // MARK: Animation
+@available(iOS 10.0, *)
 extension Spark {
 
     func animateIgniteShow(_ radius: CGFloat, duration: Double, delay: Double = 0) {
