@@ -67,6 +67,17 @@ pod 'FavoriteButton', '~> 3.1.4' Swift 4 (iOS 10.0+, in development)
 	func favoriteButtonDotColors(faveButton: FavoriteButton) -> [DotColors]?     
  ```
 
+#### What's new
+
+```swift
+3.1.1
+	// true per default, fires an UISelectionFeedbackGenerator
+    	open var providesHapticFeedback: Bool = true
+3.1.4
+    	// lets you add an Id to FavoriteButton to identify it uniquely anywhere (in the callback for example)
+    	open var faveId: Any?
+    
+```
 
 #### In Code
 
@@ -80,18 +91,7 @@ pod 'FavoriteButton', '~> 3.1.4' Swift 4 (iOS 10.0+, in development)
 ```
 
 ```swift
-3.1.1
-	//true per default, fires an UISelectionFeedbackGenerator
-    	open var providesHapticFeedback: Bool = true
-3.1.4
-    	///faveId: lets you add an Id to FavoriteButton to identify it uniquely anywhere (in the callback for example)
-    	open var faveId: Any?
-    
-```
-
-You can now choose to animate the selection
-```swift
-3.1.4
+3.1.4 lets you choose whether to animate the selection
 	faveButton.setSelected(true, animated: false)
 ```
 
