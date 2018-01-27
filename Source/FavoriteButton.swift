@@ -100,6 +100,8 @@ open class FavoriteButton: UIButton {
     fileprivate var faveIconImage: UIImage?
     fileprivate var faveIcon: FaveIcon!
 
+    var faveId: Any?
+    
     var providesHapticFeedback: Bool = true
     var selectionFeedback: UISelectionFeedbackGenerator = {
         let generator = UISelectionFeedbackGenerator()

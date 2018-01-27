@@ -33,6 +33,8 @@ class ViewController: UIViewController, FavoriteButtonDelegate {
     ]
 
     func favoriteButton(_ faveButton: FavoriteButton, didSelect selected: Bool) {
+        
+        print("Tapped Button with Id: \(faveButton.faveId ?? "No Id set"). Is now \(selected ? "selected" : "deselected")")
     }
 
     func favoriteButtonDotColors(_ faveButton: FavoriteButton) -> [DotColors]? {
@@ -46,6 +48,6 @@ class ViewController: UIViewController, FavoriteButtonDelegate {
         super.viewDidAppear(animated)
         
         heartButton?.normalColor = .black
-        
+        heartButton?.faveId = "uniqueHeartId"
     }
 }
