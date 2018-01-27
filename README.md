@@ -26,7 +26,7 @@ os use [CocoaPod](https://cocoapods.org) adding this line to you `Podfile`:
 ```ruby
 pod 'FavoriteButton', '~> 3.0.1' Swift 4 (iOS 8.0+, discontinued)
 
-pod 'FavoriteButton', '~> 3.1.1' Swift 4 (iOS 10.0+, in development)
+pod 'FavoriteButton', '~> 3.1.2' Swift 4 (iOS 10.0+, in development)
 
 ```
 
@@ -34,11 +34,11 @@ pod 'FavoriteButton', '~> 3.1.1' Swift 4 (iOS 10.0+, in development)
 
 #### With storyboard or xib files
 
-1) Create a Button that inherits from `FaveButton`
+1) Create a Button that inherits from `FavoriteButton`
 
 2) Add Image for a `Normal` state
 
-3) Set the `IBOutlet` delegate property to a subclass of `FaveButtonDelegate`
+3) Set the `IBOutlet` delegate property to a subclass of `FavoriteButtonDelegate`
 
 4) ___Optional___ manipulate porperties to change button settings
 
@@ -54,15 +54,15 @@ pod 'FavoriteButton', '~> 3.1.1' Swift 4 (iOS 10.0+, in development)
  5) ___Optional___ respond to delegate methods
 
  ```swift
-func faveButton(faveButton: FaveButton, didSelected selected: Bool)    
-func faveButtonDotColors(faveButton: FaveButton) -> [DotColors]?     
+func favoriteButton(faveButton: FavoriteButton, didSelected selected: Bool)    
+func favoriteButtonDotColors(faveButton: FavoriteButton) -> [DotColors]?     
  ```
 
 
 #### In Code
 
 ```swift
-let faveButton = FaveButton(
+let faveButton = FavoriteButton(
     frame: CGRect(x:200, y:200, width: 44, height: 44),
     faveIconNormal: UIImage(named: "heart")
 )
@@ -75,8 +75,8 @@ view.addSubview(faveButton)
 If you want differents colors for dots like `Twitter’s Heart Animation` use the delegate method for the button you want.
 
 ```swift
-func faveButtonDotColors(_ faveButton: FaveButton) -> [DotColors]?{
-	if faveButton == myFaveButton{
+func favoriteButtonDotColors(_ faveButton: FavoriteButton) -> [DotColors]? {
+	if faveButton == myFaveButton {
 		// return dot colors
 	}
 	return nil
