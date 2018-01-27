@@ -95,7 +95,7 @@ Forked from [xhamr](https://github.com/xhamr/fave-button)
 
 ## Licence
 
-FaveButton is still under the MIT license.
+FavoriteButton is still under the MIT license.
 
 
 
