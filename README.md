@@ -26,7 +26,7 @@ os use [CocoaPod](https://cocoapods.org) adding this line to you `Podfile`:
 ```ruby
 pod 'FavoriteButton', '~> 3.0.1' Swift 4 (iOS 8.0+, discontinued)
 
-pod 'FavoriteButton', '~> 3.1.3' Swift 4 (iOS 10.0+, in development)
+pod 'FavoriteButton', '~> 3.1.4' Swift 4 (iOS 10.0+, in development)
 
 ```
 
@@ -43,31 +43,56 @@ pod 'FavoriteButton', '~> 3.1.3' Swift 4 (iOS 10.0+, in development)
 4) ___Optional___ manipulate porperties to change button settings
 
 ```swift
-@IBInspectable public var normalColor:     UIColor
-@IBInspectable public var selectedColor:   UIColor
-@IBInspectable public var dotFirstColor:   UIColor
-@IBInspectable public var dotSecondColor:  UIColor
-@IBInspectable public var circleFromColor: UIColor
-@IBInspectable public var circleToColor:   UIColor
+	@IBInspectable public var normalColor:     UIColor
+	@IBInspectable public var selectedColor:   UIColor
+	@IBInspectable public var dotFirstColor:   UIColor
+	@IBInspectable public var dotSecondColor:  UIColor
+	@IBInspectable public var circleFromColor: UIColor
+	@IBInspectable public var circleToColor:   UIColor
 ```
  
  5) ___Optional___ respond to delegate methods
 
  ```swift
-func favoriteButton(faveButton: FavoriteButton, didSelected selected: Bool)    
-func favoriteButtonDotColors(faveButton: FavoriteButton) -> [DotColors]?     
+ 3.1.4 introduces better delegate handling
+ 	/// Delays the callback until after the animation completes. default is true
+    	var delaysDelegate: Bool = true
+    	/// Decides if the delegate is called for user interaction only or through setSelected / isSelected also.
+    	var firesOnUserInteractionOnly: Bool = true
+ ```
+
+
+ ```swift
+	func favoriteButton(faveButton: FavoriteButton, didSelected selected: Bool)    
+	func favoriteButtonDotColors(faveButton: FavoriteButton) -> [DotColors]?     
  ```
 
 
 #### In Code
 
 ```swift
-let faveButton = FavoriteButton(
-    frame: CGRect(x:200, y:200, width: 44, height: 44),
-    faveIconNormal: UIImage(named: "heart")
-)
-faveButton.delegate = self
-view.addSubview(faveButton)
+	let faveButton = FavoriteButton(
+	    frame: CGRect(x:200, y:200, width: 44, height: 44),
+	    faveIconNormal: UIImage(named: "heart")
+	)
+	faveButton.delegate = self
+	view.addSubview(faveButton)
+```
+
+```swift
+3.1.1
+	//true per default, fires an UISelectionFeedbackGenerator
+    	open var providesHapticFeedback: Bool = true
+3.1.4
+    	///faveId: lets you add an Id to FavoriteButton to identify it uniquely anywhere (in the callback for example)
+    	open var faveId: Any?
+    
+```
+
+You can now choose to animate the selection
+```swift
+3.1.4
+	faveButton.setSelected(true, animated: false)
 ```
 
 ## Manipulating dot colors
@@ -75,12 +100,12 @@ view.addSubview(faveButton)
 If you want differents colors for dots like `Twitter’s Heart Animation` use the delegate method for the button you want.
 
 ```swift
-func favoriteButtonDotColors(_ faveButton: FavoriteButton) -> [DotColors]? {
-	if faveButton == myFaveButton {
-		// return dot colors
+	func favoriteButtonDotColors(_ faveButton: FavoriteButton) -> [DotColors]? {
+		if faveButton == myFaveButton {
+			// return dot colors
+		}
+		return nil
 	}
-	return nil
-}
 ```
 
 in FaveButtonDemo you will find a set of color to cause dots appear like this:
