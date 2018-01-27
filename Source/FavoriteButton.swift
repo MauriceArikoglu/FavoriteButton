@@ -55,13 +55,26 @@ open class FavoriteButton: UIButton {
 
     }
 
+    // MARK: Colors
     @IBInspectable open var normalColor: UIColor = UIColor(red:   137.0.fromRGB,
                                                            green: 156.0.fromRGB,
-                                                           blue:  167.0.fromRGB, alpha: 1.0)
+                                                           blue:  167.0.fromRGB, alpha: 1.0) {
+        didSet {
+            if faveIcon != nil && !isSelected {
+                faveIcon.iconLayer.fillColor = normalColor.cgColor
+            }
+        }
+    }
 
     @IBInspectable open var selectedColor: UIColor = UIColor(red:   226.0.fromRGB,
                                                              green: 38.0.fromRGB,
-                                                             blue:  77.0.fromRGB, alpha: 1.0)
+                                                             blue:  77.0.fromRGB, alpha: 1.0) {
+        didSet {
+            if faveIcon != nil && isSelected {
+                faveIcon.iconLayer.fillColor = selectedColor.cgColor
+            }
+        }
+    }
 
     @IBInspectable open var dotFirstColor: UIColor = UIColor(red:   152.0.fromRGB,
                                                              green: 219.0.fromRGB,
@@ -79,6 +92,7 @@ open class FavoriteButton: UIButton {
                                                              green: 143.0.fromRGB,
                                                              blue:  246.0.fromRGB, alpha: 1.0)
 
+    // MARK: Delegate
     @IBOutlet open weak var delegate: AnyObject?
 
     fileprivate(set) var sparkGroupCount: Int = 7
@@ -95,7 +109,7 @@ open class FavoriteButton: UIButton {
 
     override open var isSelected: Bool {
         didSet {
-            animateSelect(self.isSelected, duration: Constants.duration)
+            animateSelect(isSelected, duration: Constants.duration)
         }
     }
 
@@ -181,7 +195,7 @@ extension FavoriteButton {
 
             return colors[colorIndex]
         }
-        return DotColors(self.dotFirstColor, self.dotSecondColor)
+        return DotColors(dotFirstColor, dotSecondColor)
     }
 
 }
@@ -204,7 +218,7 @@ extension FavoriteButton {
             selectionFeedback.selectionChanged()
         }
         
-        guard case let delegate as FavoriteButtonDelegate = self.delegate else {
+        guard case let delegate as FavoriteButtonDelegate = delegate else {
             return
         }
 
@@ -231,7 +245,7 @@ extension FavoriteButton {
             let igniteFromRadius = radius * 0.8
             let igniteToRadius = radius * 1.1
 
-            let ring = Ring.createRing(self, radius: 0.01, lineWidth: 3, fillColor: self.circleFromColor)
+            let ring = Ring.createRing(self, radius: 0.01, lineWidth: 3, fillColor: circleFromColor)
             let sparks = createSparks(igniteFromRadius)
 
             ring.animateToRadius(radius, toColor: circleToColor, duration: Constants.expandDuration, delay: 0)
