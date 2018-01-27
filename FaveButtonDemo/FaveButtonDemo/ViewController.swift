@@ -49,5 +49,10 @@ class ViewController: UIViewController, FavoriteButtonDelegate {
         
         heartButton?.normalColor = .black
         heartButton?.faveId = "uniqueHeartId"
+        
+        // Allows selection to be animated or not
+        heartButton?.delaysDelegate = false
+        heartButton?.firesOnUserInteractionOnly = false
+        heartButton?.setSelected(true, animated: true)
     }
 }

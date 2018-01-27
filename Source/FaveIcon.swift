@@ -88,6 +88,16 @@ extension FaveIcon {
 // MARK: Animation
 extension FaveIcon {
 
+    func setSelected(_ selected: Bool = false, animated: Bool = true, fillColor: UIColor, duration: Double = 0.5, delay: Double = 0.0) {
+        
+        if animated {
+            animateSelect(selected, fillColor: fillColor, duration: duration, delay: delay)
+        } else {
+            iconLayer.fillColor = fillColor.cgColor
+        }
+        
+    }
+    
     func animateSelect(_ isSelected: Bool = false, fillColor: UIColor, duration: Double = 0.5, delay: Double = 0.0) {
         if tweenValues == nil {
             tweenValues = generateTweenValues(from: 0.0, to: 1.0, duration: CGFloat(duration))

@@ -93,6 +93,11 @@ open class FavoriteButton: UIButton {
                                                              blue:  246.0.fromRGB, alpha: 1.0)
 
     // MARK: Delegate
+    /// Delays the callback until after the animation completes. default is true
+    open var delaysDelegate: Bool = true
+    /// Decides if the delegate is called for user interaction only or through setSelected / isSelected also.
+    open var firesOnUserInteractionOnly: Bool = true
+    
     @IBOutlet open weak var delegate: AnyObject?
 
     fileprivate(set) var sparkGroupCount: Int = 7
@@ -100,19 +105,53 @@ open class FavoriteButton: UIButton {
     fileprivate var faveIconImage: UIImage?
     fileprivate var faveIcon: FaveIcon!
 
-    var faveId: Any?
+    /// - faveId: lets you add an Id to FavoriteButton to identify it uniquely in any callback
+    open var faveId: Any?
     
-    var providesHapticFeedback: Bool = true
-    var selectionFeedback: UISelectionFeedbackGenerator = {
+    open var providesHapticFeedback: Bool = true
+    fileprivate var selectionFeedback: UISelectionFeedbackGenerator = {
         let generator = UISelectionFeedbackGenerator()
         generator.prepare()
         return generator
     }()
-
+    
+    fileprivate var animatesNextSelection = true
+    /// Sets the button selected, animates the selection or deselection
     override open var isSelected: Bool {
         didSet {
-            animateSelect(isSelected, duration: Constants.duration)
+            
+            if animatesNextSelection {
+                animateSelect(isSelected, duration: Constants.duration)
+            } else {
+                animatesNextSelection = true
+                faveIcon.setSelected(animated: false, fillColor: isSelected ? selectedColor : normalColor)
+            }
+            
+            guard firesOnUserInteractionOnly == false,
+                case let delegate as FavoriteButtonDelegate = delegate else {
+                return
+            }
+            
+            if delaysDelegate {
+                
+                let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Constants.duration)) / Double(NSEC_PER_SEC)
+                
+                DispatchQueue.main.asyncAfter(deadline: delay) {
+                    delegate.favoriteButton(self, didSelect: self.isSelected)
+                }
+                
+            } else {
+                delegate.favoriteButton(self, didSelect: self.isSelected)
+            }
+
         }
+        
+    }
+    
+    /// Sets the button selected, animates the selection per default
+    open func setSelected(_ selected: Bool, animated: Bool = true) {
+        animatesNextSelection = animated
+        isSelected = selected
     }
 
     convenience public init(frame: CGRect, faveIconNormal: UIImage?) {
@@ -220,15 +259,23 @@ extension FavoriteButton {
             selectionFeedback.selectionChanged()
         }
         
-        guard case let delegate as FavoriteButtonDelegate = delegate else {
-            return
+        guard firesOnUserInteractionOnly == true,
+            case let delegate as FavoriteButtonDelegate = delegate else {
+                return
+        }
+        
+        if delaysDelegate {
+            
+            let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Constants.duration)) / Double(NSEC_PER_SEC)
+            
+            DispatchQueue.main.asyncAfter(deadline: delay) {
+                delegate.favoriteButton(self, didSelect: self.isSelected)
+            }
+            
+        } else {
+            delegate.favoriteButton(self, didSelect: self.isSelected)
         }
 
-        let delay = DispatchTime.now() + Double(Int64(Double(NSEC_PER_SEC) * Constants.duration)) / Double(NSEC_PER_SEC)
-
-        DispatchQueue.main.asyncAfter(deadline: delay) {
-            delegate.favoriteButton(sender, didSelect: sender.isSelected)
-        }
     }
 
 }
